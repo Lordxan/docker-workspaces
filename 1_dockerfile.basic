@@ -13,6 +13,7 @@ RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTO
 RUN sed -E 's/ZSH_THEME="robbyrussell"/ZSH_THEME="powerlevel10k\/powerlevel10k"/' ~/.zshrc | sponge ~/.zshrc
 RUN echo ${WORKSPACE_USER} | sudo -S chsh ${WORKSPACE_USER} -s $(which zsh)
 
+RUN mkdir -p /home/${WORKSPACE_USER}/downloads
 WORKDIR /home/${WORKSPACE_USER}/downloads
 RUN wget -c https://github.com/neovim/neovim/releases/download/v0.8.3/nvim-linux64.tar.gz -O - | tar -xz
 RUN echo ${WORKSPACE_USER} | sudo -S rsync -a ./nvim-linux64/* /usr/
