@@ -9,9 +9,8 @@ on:
 jobs:
 
   build:
-
     runs-on: ubuntu-latest
-
+    environment: main
     steps:
     - uses: actions/checkout@v3
     - name: Log in to the Container registry
@@ -19,7 +18,7 @@ jobs:
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        password: ${{ secrets.PACKAGE_TOKEN }}
     - name: Build the Docker image
       run: cat build.sh | sed -e 's/$USER/$GITHUB_REPOSITORY_OWNER/' | bash
     - name: Publish to GHCR
