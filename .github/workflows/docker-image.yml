@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: cat build.sh | sed -e 's/$USER/$WORKSPACE_USER/' | bash
+      run: cat build.sh | sed -e 's/$USER/$GITHUB_REPOSITORY_OWNER/' | bash
