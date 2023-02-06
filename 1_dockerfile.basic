@@ -5,18 +5,19 @@ ARG WORKSPACE_USER
 RUN apt update && apt -y install sudo
 RUN useradd -m ${WORKSPACE_USER} && \
     echo "${WORKSPACE_USER}:${WORKSPACE_USER}" | chpasswd && adduser ${WORKSPACE_USER} sudo
+RUN echo "${WORKSPACE_USER} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 USER ${WORKSPACE_USER}
-RUN echo ${WORKSPACE_USER} | sudo -S apt install -y curl wget zsh git moreutils rsync
+RUN sudo apt install -y curl wget zsh git moreutils rsync
 
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 RUN sed -E 's/ZSH_THEME="robbyrussell"/ZSH_THEME="powerlevel10k\/powerlevel10k"/' ~/.zshrc | sponge ~/.zshrc
-RUN echo ${WORKSPACE_USER} | sudo -S chsh ${WORKSPACE_USER} -s $(which zsh)
+RUN sudo chsh ${WORKSPACE_USER} -s $(which zsh)
 
 RUN mkdir -p /home/${WORKSPACE_USER}/downloads
 WORKDIR /home/${WORKSPACE_USER}/downloads
 RUN wget -c https://github.com/neovim/neovim/releases/download/v0.8.3/nvim-linux64.tar.gz -O - | tar -xz
-RUN echo ${WORKSPACE_USER} | sudo -S rsync -a ./nvim-linux64/* /usr/
+RUN sudo rsync -a ./nvim-linux64/* /usr/
 RUN echo alias vim=$(which nvim) >> ~/.zshrc
 RUN mkdir -p ~/.config && ln -s ~/.SpaceVim ~/.config/nvim 
 RUN curl -sLf https://spacevim.org/install.sh | bash -s -- --no-fonts
