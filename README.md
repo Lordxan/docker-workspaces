@@ -1,6 +1,8 @@
 # Usage
 ## docker
-`docker run --rm -it -v ${PWD}:/repos ghcr.io/lordxan/docker-workspaces:basic`
+```console
+docker run --rm -it -v ${PWD}:/repos ghcr.io/lordxan/docker-workspaces:basic
+```
 ## wsl
 ```console
 docker run --rm -it -v ${PWD}:/repos ghcr.io/lordxan/docker-workspaces:basic
