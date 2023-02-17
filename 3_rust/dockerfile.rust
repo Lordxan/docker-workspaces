@@ -7,8 +7,5 @@ RUN sudo apt install -y build-essential
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y
 ENV PATH="/home/${WORKSPACE_USER}/.cargo/bin:${PATH}"
 RUN rustup component add rust-src
-RUN mkdir -p ~/.local/bin && \
-    curl -L https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-unknown-linux-gnu.gz | gunzip -c - > ~/.local/bin/rust-analyzer && \
-    chmod +x ~/.local/bin/rust-analyzer
 COPY ./3_rust/init.toml .SpaceVim.d/init.toml
 COPY ./3_rust/myspacevim.vim .SpaceVim.d/autoload/myspacevim.vim
