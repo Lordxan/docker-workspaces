@@ -8,4 +8,3 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y
 ENV PATH="/home/${WORKSPACE_USER}/.cargo/bin:${PATH}"
 RUN rustup component add rust-src
 COPY ./3_rust/init.toml .SpaceVim.d/init.toml
-COPY ./3_rust/myspacevim.vim .SpaceVim.d/autoload/myspacevim.vim
