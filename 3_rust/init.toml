@@ -8,7 +8,6 @@
 
 # All SpaceVim option below [option] section
 [options]
-    bootstrap_after = "myspacevim#after"
     # set spacevim theme. by default colorscheme layer is not loaded,
     # if you want to use more colorscheme, please load the colorscheme
     # layer
