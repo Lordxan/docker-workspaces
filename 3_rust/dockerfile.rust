@@ -1,4 +1,4 @@
-FROM nodejs-workspace
+FROM basic-workspace
 
 ARG WORKSPACE_USER
 USER ${WORKSPACE_USER}
@@ -6,5 +6,12 @@ USER ${WORKSPACE_USER}
 RUN sudo apt install -y build-essential
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y
 ENV PATH="/home/${WORKSPACE_USER}/.cargo/bin:${PATH}"
-RUN rustup component add rust-src
-COPY ./3_rust/init.toml .SpaceVim.d/init.toml
+RUN rustup component add rust-src rust-analyzer
+RUN sudo ln -s $(rustup which rust-analyzer) /usr/local/bin/rust-analyzer
+RUN cd downloads && \
+    git clone --depth=1 https://github.com/helix-editor/helix && \
+    cd helix && \
+    cargo install --locked --path helix-term
+RUN mv ~/downloads/helix/runtime ~/.config/helix/
+COPY ./3_rust/config.toml "/home/${WORKSPACE_USER}/.config/helix/config.toml"
+COPY ./3_rust/languages.toml "/home/${WORKSPACE_USER}/.config/helix/languages.toml"
