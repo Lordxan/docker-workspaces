@@ -7,7 +7,7 @@ RUN sudo apt install -y build-essential
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y --default-toolchain 1.63.0-x86_64-unknown-linux-gnu
 ENV PATH="/home/${WORKSPACE_USER}/.cargo/bin:${PATH}"
 RUN cd downloads && \
-    git clone --depth=1 https://github.com/poliorcetics/helix && \
+    git clone --single-branch --branch 2070-lsp-type-hints --depth=1 https://github.com/poliorcetics/helix && \
     cd helix && \
     cargo install --locked --path helix-term
 RUN rsync -avz /home/${WORKSPACE_USER}/downloads/helix/runtime /home/${WORKSPACE_USER}/.config/helix/
