@@ -20,6 +20,6 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.PACKAGE_TOKEN }}
     - name: Build the Docker image
-      run: cat build.sh | sed -e 's/$USER/$GITHUB_REPOSITORY_OWNER/' | bash
+      run: cat build.sh | sed -e 's/$USER/$GITHUB_REPOSITORY_OWNER/' | DOCKER_BUILDKIT=1 bash
     - name: Publish to GHCR
       run: bash publish.sh
