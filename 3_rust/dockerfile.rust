@@ -19,10 +19,8 @@ USER ${WORKSPACE_USER}
 
 RUN sudo apt install -y build-essential
 
-COPY --from=Base /home/${WORKSPACE_USER}/.cargo/bin /home/${WORKSPACE_USER}/.cargo/bin
-COPY --from=Base /home/${WORKSPACE_USER}/.config/helix /home/${WORKSPACE_USER}/.config/helix
-RUN sudo chown -R ${WORKSPACE_USER}:${WORKSPACE_USER} ~/.cargo
-RUN sudo chown -R ${WORKSPACE_USER}:${WORKSPACE_USER} ~/.config
+COPY --chown=1000:1000 --chmod=777 --from=Base /home/${WORKSPACE_USER}/.cargo/bin /home/${WORKSPACE_USER}/.cargo/bin
+COPY --chown=1000:1000 --chmod=777 --from=Base /home/${WORKSPACE_USER}/.config/helix /home/${WORKSPACE_USER}/.config/helix
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y
 ENV PATH="/home/${WORKSPACE_USER}/.cargo/bin:${PATH}"
