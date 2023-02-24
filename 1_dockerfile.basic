@@ -1,4 +1,20 @@
-FROM debian:stable-slim
+FROM debian:stable-slim as helix
+
+ARG WORKSPACE_USER
+
+RUN apt update && apt install -y build-essential curl rsync git
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y --default-toolchain 1.63.0-x86_64-unknown-linux-gnu
+ENV PATH="/root/.cargo/bin:${PATH}"
+WORKDIR /root
+RUN mkdir .config
+RUN mkdir downloads && \
+    cd downloads && \
+    git clone --single-branch --branch 2070-lsp-type-hints --depth=1 https://github.com/poliorcetics/helix && \
+    cd helix && \
+    cargo install --locked --path helix-term
+RUN rsync -avz /root/downloads/helix/runtime /root/.config/helix/
+
+FROM debian:stable-slim as base
 
 ARG WORKSPACE_USER
 
@@ -14,13 +30,9 @@ RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTO
 RUN sed -E 's/ZSH_THEME="robbyrussell"/ZSH_THEME="powerlevel10k\/powerlevel10k"/' ~/.zshrc | sponge ~/.zshrc
 RUN sudo chsh ${WORKSPACE_USER} -s $(which zsh)
 
-RUN mkdir -p /home/${WORKSPACE_USER}/downloads
-WORKDIR /home/${WORKSPACE_USER}/downloads
-RUN wget -c https://github.com/neovim/neovim/releases/download/v0.8.3/nvim-linux64.tar.gz -O - | tar -xz
-RUN sudo rsync -a ./nvim-linux64/* /usr/
-RUN echo alias vim=$(which nvim) >> ~/.zshrc
-RUN mkdir -p ~/.config && ln -s ~/.SpaceVim ~/.config/nvim 
-RUN curl -sLf https://spacevim.org/install.sh | bash -s -- --no-fonts
+COPY --chown=1000:1000 --chmod=777 --from=helix /root/.cargo/bin /home/${WORKSPACE_USER}/.cargo/bin
+COPY --chown=1000:1000 --chmod=777 --from=helix /root/.config/helix /home/${WORKSPACE_USER}/.config/helix
+COPY ./configs/config.toml "/home/${WORKSPACE_USER}/.config/helix/config.toml"
 
 WORKDIR /home/${WORKSPACE_USER}
 

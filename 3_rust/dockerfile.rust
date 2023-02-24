@@ -1,31 +1,13 @@
-FROM basic-workspace as Base
+FROM basic-workspace
 
 ARG WORKSPACE_USER
 USER ${WORKSPACE_USER}
 
 RUN sudo apt install -y build-essential
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y --default-toolchain 1.63.0-x86_64-unknown-linux-gnu
-ENV PATH="/home/${WORKSPACE_USER}/.cargo/bin:${PATH}"
-RUN cd downloads && \
-    git clone --single-branch --branch 2070-lsp-type-hints --depth=1 https://github.com/poliorcetics/helix && \
-    cd helix && \
-    cargo install --locked --path helix-term
-RUN rsync -avz /home/${WORKSPACE_USER}/downloads/helix/runtime /home/${WORKSPACE_USER}/.config/helix/
-
-FROM basic-workspace as Final
-
-ARG WORKSPACE_USER
-USER ${WORKSPACE_USER}
-
-RUN sudo apt install -y build-essential
-
-COPY --chown=1000:1000 --chmod=777 --from=Base /home/${WORKSPACE_USER}/.cargo/bin /home/${WORKSPACE_USER}/.cargo/bin
-COPY --chown=1000:1000 --chmod=777 --from=Base /home/${WORKSPACE_USER}/.config/helix /home/${WORKSPACE_USER}/.config/helix
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y
 ENV PATH="/home/${WORKSPACE_USER}/.cargo/bin:${PATH}"
 RUN rustup component add rust-src rust-analyzer
 RUN sudo ln -s $(rustup which rust-analyzer) /usr/local/bin/rust-analyzer
 
-COPY ./3_rust/config.toml "/home/${WORKSPACE_USER}/.config/helix/config.toml"
 COPY ./3_rust/languages.toml "/home/${WORKSPACE_USER}/.config/helix/languages.toml"
