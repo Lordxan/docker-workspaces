@@ -34,6 +34,7 @@ RUN sudo chsh ${WORKSPACE_USER} -s $(which zsh)
 COPY --chown=1000:1000 --chmod=777 --from=helix /root/.cargo/bin /home/${WORKSPACE_USER}/.cargo/bin
 COPY --chown=1000:1000 --chmod=777 --from=helix /root/.config/helix /home/${WORKSPACE_USER}/.config/helix
 COPY ./configs/config.toml "/home/${WORKSPACE_USER}/.config/helix/config.toml"
+COPY ./main_theme.toml "/home/${WORKSPACE_USER}/.config/helix/themes/main.toml"
 RUN sudo ln -s $(rustup which gitui) /bin/gitui
 RUN sudo ln -s $(rustup which zellij) /bin/tmux
 
