@@ -1,3 +1,5 @@
+theme = "main"
+
 [editor]
 true-color = true
 [editor.lsp]
