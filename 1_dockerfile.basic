@@ -9,7 +9,7 @@ WORKDIR /root
 RUN mkdir .config
 RUN mkdir downloads && \
     cd downloads && \
-    git clone --single-branch --branch 2070-lsp-type-hints --depth=1 https://github.com/poliorcetics/helix && \
+    git clone --depth=1 https://github.com/helix-editor/helix.git && \
     cd helix && \
     cargo install --locked --path helix-term
 RUN cargo install --locked gitui zellij
