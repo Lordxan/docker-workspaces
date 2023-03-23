@@ -38,6 +38,8 @@ COPY ./configs/main_theme.toml "/home/${WORKSPACE_USER}/.config/helix/themes/mai
 RUN sudo ln -s $(rustup which gitui) /bin/gitui
 RUN sudo ln -s $(rustup which zellij) /bin/tmux
 
+RUN cd /bin && sudo wget -qO- https://github.com/gokcehan/lf/releases/download/r28/lf-linux-amd64.tar.gz | tar xvz
+
 WORKDIR /home/${WORKSPACE_USER}
 
 CMD /bin/zsh
