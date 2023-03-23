@@ -35,10 +35,8 @@ COPY --chown=1000:1000 --chmod=777 --from=helix /root/.cargo/bin /home/${WORKSPA
 COPY --chown=1000:1000 --chmod=777 --from=helix /root/.config/helix /home/${WORKSPACE_USER}/.config/helix
 COPY ./configs/config.toml "/home/${WORKSPACE_USER}/.config/helix/config.toml"
 COPY ./configs/main_theme.toml "/home/${WORKSPACE_USER}/.config/helix/themes/main.toml"
-RUN sudo ln -s $(rustup which gitui) /bin/gitui
-RUN sudo ln -s $(rustup which zellij) /bin/tmux
 
-RUN cd /bin && sudo wget -qO- https://github.com/gokcehan/lf/releases/download/r28/lf-linux-amd64.tar.gz | tar xvz
+RUN cd /bin && sudo wget -qO- https://github.com/gokcehan/lf/releases/download/r28/lf-linux-amd64.tar.gz | sudo tar xvz
 
 WORKDIR /home/${WORKSPACE_USER}
 
