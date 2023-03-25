@@ -36,6 +36,9 @@ COPY --chown=1000:1000 --chmod=777 --from=helix /root/.config/helix /home/${WORK
 COPY ./configs/config.toml "/home/${WORKSPACE_USER}/.config/helix/config.toml"
 COPY ./configs/main_theme.toml "/home/${WORKSPACE_USER}/.config/helix/themes/main.toml"
 
+RUN sudo ln -s /home/${WORKSPACE_USER}/.cargo/bin/gitui /bin/gitui
+RUN sudo ln -s /home/${WORKSPACE_USER}/.cargo/bin/zellij /bin/zellij
+
 RUN cd /bin && sudo wget -qO- https://github.com/gokcehan/lf/releases/download/r28/lf-linux-amd64.tar.gz | sudo tar xvz
 
 WORKDIR /home/${WORKSPACE_USER}
